@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: esalert-test-pod
+spec:
+  containers:
+    - name: elastalert-container
+      image: sandeepchowdary/elastalert:1.7
+      volumeMounts:
+      - name: rules-volume
+        mountPath: /etc/es-rules
+      - name: config-volume
+        mountPath: /opt/elastalert
+#        subPath: config.yaml
+#      - name: rule-temp-volume
+#        mountPath: /opt/elastalert/rule_templates
+      - name: config-node-volume
+        mountPath: /opt/elastalert-server/config
+
+  volumes:
+    - name: rules-volume
+      configMap:
+        name: es-rules
+    - name: config-volume
+      configMap:
+        name: es-config
+        items:
+        - key: elastalert.yaml
+          path: config.yaml
+#    - name: rule-temp-volume
+#      configMap:
+#        name: es-ruletempconfig
+    - name: config-node-volume
+      configMap:
+        name: es-nodeconfig
+  restartPolicy: Never
