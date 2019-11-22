@@ -1,0 +1,25 @@
+#https://www.unixarena.com/2019/04/jenkins-passing-extra-variables-for-ansible-playbook.html/
+---
+- hosts: all
+#  vars:
+#    USER_NAME: user4
+#    USER_PASSWORD: user4
+  gather_facts: no
+  become: yes
+
+  tasks:
+  -  name: Create User Task
+     command: /usr/local/openvpn_as/scripts/sacli --user {{ USER_NAME }}  --key type --value user_connect UserPropPut
+     #     args:
+     #       chdir: /usr/local/openvpn_as/scripts/
+     register: clog
+
+  -  debug:
+      msg: "User Creation Log {{ clog.stdout }}"
+
+  -  name: Create Password task
+     command: /usr/local/openvpn_as/scripts/sacli --user {{ USER_NAME }} --new_pass {{ USER_PASSWORD }}  SetLocalPassword
+     register: plog
+
+  -  debug:
+      msg: "User Creation Log {{ plog.stdout }}"
