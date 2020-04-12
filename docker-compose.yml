@@ -59,3 +59,4 @@ volumes:
     driver: local
 networks:
   esnet:
+##vm.max_map_count = 262144
